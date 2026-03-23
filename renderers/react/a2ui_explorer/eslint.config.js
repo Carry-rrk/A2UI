@@ -14,48 +14,55 @@
  * limitations under the License.
  */
 
-import js from '@eslint/js';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import reactRefreshPlugin from 'eslint-plugin-react-refresh';
 import prettierConfig from 'eslint-config-prettier';
 import gts from 'gts';
 
 export default tseslint.config(
   // Google TypeScript style guide plugin.
-  // See: https://github.com/google/gts
-  // And: https://google.github.io/styleguide/tsguide.html
-  ...gts,
+  ...gts.map(config => ({
+    ...config,
+    // Override the project for a2ui_explorer since it has its own tsconfig
+    ...(config.languageOptions?.parserOptions?.project ? {
+      languageOptions: {
+        ...config.languageOptions,
+        parserOptions: {
+          ...config.languageOptions.parserOptions,
+          project: ['./tsconfig.app.json', './tsconfig.node.json']
+        }
+      }
+    } : {})
+  })),
 
-  // React configuration
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
-      react: reactPlugin,
       'react-hooks': reactHooksPlugin,
+      'react-refresh': reactRefreshPlugin,
     },
     languageOptions: {
+      ecmaVersion: 2020,
+      globals: {
+        ...globals.browser,
+      },
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
         },
       },
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
     rules: {
       // React Hooks rules (errors)
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
+      ...reactHooksPlugin.configs.recommended.rules,
 
-      // React rules
-      'react/jsx-uses-react': 'off', // Not needed with new JSX transform
-      'react/react-in-jsx-scope': 'off', // Not needed with new JSX transform
-      'react/prop-types': 'off', // Using TypeScript for prop validation
-      'react/display-name': 'warn',
+      // React Refresh rules
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
 
       // TypeScript rules
       '@typescript-eslint/no-unused-vars': [
@@ -82,18 +89,17 @@ export default tseslint.config(
 
   // Test files - relaxed rules
   {
-    files: ['tests/**/*.{ts,tsx}', '**/*.test.{ts,tsx}'],
+    files: ['tests/**/*.{ts,tsx}', '**/*.test.{ts,tsx}', 'src/setupTests.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       'no-console': 'off',
     },
   },
 
-  // Prettier config (must be last to override conflicting rules)
+  // Prettier config
   prettierConfig,
 
-  // Ignored paths
   {
-    ignores: ['dist/**', 'node_modules/**', 'visual-parity/**', '**/*.d.ts'],
+    ignores: ['dist/**', 'node_modules/**', '**/*.d.ts'],
   }
 );

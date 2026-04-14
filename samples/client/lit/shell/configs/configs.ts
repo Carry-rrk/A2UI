@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-export { Snackbar } from "./snackbar";
+export type { AppConfig } from "./types.js";
+export { restaurantConfig } from "./restaurant.js";

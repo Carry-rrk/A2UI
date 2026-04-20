@@ -37,7 +37,9 @@ import os
 import traceback
 import urllib.parse
 
+# Load .env from current dir and then from project root
 load_dotenv()
+load_dotenv("../../../.env") 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -52,14 +54,21 @@ class MissingAPIKeyError(Exception):
 @click.option("--port", default=10006)
 def main(host, port):
   try:
-    if not os.getenv("GOOGLE_GENAI_USE_VERTEXAI") == "TRUE":
-      if not os.getenv("GEMINI_API_KEY"):
-        raise MissingAPIKeyError(
-            "GEMINI_API_KEY environment variable not set and GOOGLE_GENAI_USE_VERTEXAI"
-            " is not TRUE."
-        )
-
     lite_llm_model = os.getenv("LITELLM_MODEL", "gemini/gemini-2.5-flash")
+    
+    # Validation logic: Only require GEMINI_API_KEY if model provider is gemini
+    if lite_llm_model.startswith("gemini/"):
+      if not os.getenv("GOOGLE_GENAI_USE_VERTEXAI") == "TRUE":
+        if not os.getenv("GEMINI_API_KEY"):
+          raise MissingAPIKeyError(
+              "GEMINI_API_KEY environment variable not set and GOOGLE_GENAI_USE_VERTEXAI"
+              " is not TRUE."
+          )
+
+    logger.info(f"Starting agent with model: {lite_llm_model}")
+    if os.getenv("OPENAI_API_BASE"):
+        logger.info(f"Using Custom API Base: {os.getenv('OPENAI_API_BASE')}")
+
     base_url = f"http://{host}:{port}"
 
     agent = McpAppProxyAgent(

@@ -14,6 +14,7 @@
 
 import logging
 import os
+import traceback
 
 import click
 from a2a.server.apps import A2AStarletteApplication
@@ -25,7 +26,9 @@ from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 
+# Load local and root .env
 load_dotenv()
+load_dotenv("../../../.env")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -40,13 +43,20 @@ class MissingAPIKeyError(Exception):
 @click.option("--port", default=10002)
 def main(host, port):
   try:
-    # Check for API key only if Vertex AI is not configured
-    if not os.getenv("GOOGLE_GENAI_USE_VERTEXAI") == "TRUE":
-      if not os.getenv("GEMINI_API_KEY"):
-        raise MissingAPIKeyError(
-            "GEMINI_API_KEY environment variable not set and GOOGLE_GENAI_USE_VERTEXAI"
-            " is not TRUE."
-        )
+    lite_llm_model = os.getenv("LITELLM_MODEL", "gemini/gemini-2.5-flash")
+    
+    # Check for API key only if model is Gemini and Vertex AI is not configured
+    if lite_llm_model.startswith("gemini/"):
+      if not os.getenv("GOOGLE_GENAI_USE_VERTEXAI") == "TRUE":
+        if not os.getenv("GEMINI_API_KEY"):
+          raise MissingAPIKeyError(
+              "GEMINI_API_KEY environment variable not set and GOOGLE_GENAI_USE_VERTEXAI"
+              " is not TRUE."
+          )
+
+    logger.info(f"Starting Restaurant Agent with model: {lite_llm_model}")
+    if os.getenv("OPENAI_API_BASE"):
+        logger.info(f"Using Custom API Base: {os.getenv('OPENAI_API_BASE')}")
 
     base_url = f"http://{host}:{port}"
 
@@ -80,7 +90,7 @@ def main(host, port):
     logger.error(f"Error: {e}")
     exit(1)
   except Exception as e:
-    logger.error(f"An error occurred during server startup: {e}")
+    logger.error(f"An error occurred during server startup: {e} {traceback.format_exc()}")
     exit(1)
 
 

@@ -16,30 +16,25 @@
 
 import { IncomingMessage, ServerResponse } from "http";
 import { Plugin, ViteDevServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
 import { v0_8 } from "@a2ui/lit";
-import { createA2UIPrompt, createImageParsePrompt } from "./prompts";
-
-// TODO: Reenable.
-// import ServerToClientMessage from "../schemas/a2ui-message.js";
+import { createA2UIPrompt } from "./prompts";
 
 let catalog: v0_8.Types.ClientCapabilitiesDynamic | null = null;
-let ai: GoogleGenAI;
+
+/**
+ * Custom LLM handler that supports OpenAI-compatible APIs (like vLLM)
+ */
 export const plugin = (): Plugin => {
-  if (!("GEMINI_API_KEY" in process.env && process.env.GEMINI_KEY !== "")) {
-    throw new Error("No GEMINI_API_KEY environment variable; add one to .env");
-  }
+  const baseUrl = process.env.LLM_BASE_URL || "http://localhost:8082/v1";
+  const modelName = process.env.LLM_MODEL_NAME || "Qwen3.5-35B-A3B";
+  const apiKey = process.env.LLM_API_KEY || "not-needed";
 
   return {
-    name: "custom-gemini-handler",
+    name: "custom-gemini-handler", // Kept name for compatibility with imports
     configureServer(server: ViteDevServer) {
       server.middlewares.use(
         "/a2ui",
         async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
-          if (!ai) {
-            ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-          }
-
           if (req.method === "POST") {
             let contents = "";
 
@@ -52,6 +47,7 @@ export const plugin = (): Plugin => {
                 const payload = JSON.parse(
                   contents
                 ) as v0_8.Types.A2UIClientEventMessage;
+
                 if (payload.clientUiCapabilities || payload.userAction) {
                   if (payload.clientUiCapabilities) {
                     if ("dynamicCatalog" in payload.clientUiCapabilities) {
@@ -61,18 +57,16 @@ export const plugin = (): Plugin => {
                       res.setHeader("Content-Type", "application/json");
                       res.end(
                         JSON.stringify({
-                          role: "model",
+                          role: "assistant",
                           parts: [{ text: "Dynamic Catalog Received" }],
                         })
                       );
                       return;
                     }
                   } else if (payload.userAction) {
-                    // TODO: Handle user actions.
                     return;
                   }
                 } else {
-                  // Other payload - assume this is a user request.
                   if (!payload.request || !catalog) {
                     res.statusCode = 400;
                     res.setHeader("Content-Type", "application/json");
@@ -90,83 +84,73 @@ export const plugin = (): Plugin => {
                       instructions: string;
                     };
 
+                    // For now, we assume simple text instructions as most local vLLMs 
+                    // might need specific setup for multimodal. 
+                    // We ignore imageDescription or set it to empty if vLLM is text-only.
                     let imageDescription = "";
-                    if (
-                      request.imageData &&
-                      request.imageData.startsWith("data:")
-                    ) {
-                      const mimeType = /data:(.*);/
-                        .exec(request.imageData)
-                        ?.at(1);
-                      if (!mimeType) {
-                        throw new Error("Invalid inline data");
-                      }
-                      const data = request.imageData.substring(
-                        `data:${mimeType};base64,`.length
-                      );
-                      const contentPart = {
-                        inlineData: {
-                          mimeType,
-                          data,
-                        },
-                      };
-
-                      const prompt = createImageParsePrompt(
-                        catalog,
-                        contentPart
-                      );
-                      const modelResponse = await ai.models.generateContent({
-                        model: "gemini-2.5-flash",
-                        contents: prompt,
-                        config: {
-                          systemInstruction: `
-                        You are working as part of an AI system, so no chit-chat and
-                        no explaining what you're doing and why.DO NOT start with
-                        "Okay", or "Alright" or any preambles. Just the output,
-                        please.`,
-                        },
-                      });
-                      imageDescription = modelResponse.text ?? "";
+                    if (request.imageData) {
+                      imageDescription = "[Image provided]";
                     }
 
-                    const prompt = createA2UIPrompt(
+                    const promptObj = createA2UIPrompt(
                       catalog,
                       imageDescription,
                       request.instructions
                     );
 
-                    const modelResponse = await ai.models.generateContent({
-                      model: "gemini-2.5-flash",
-                      contents: prompt,
-                      config: {
-                        // responseMimeType: "application/json",
-                        // responseJsonSchema: {
-                        //   type: "array",
-                        //   items: ServerToClientMessage,
-                        // },
-                        systemInstruction: `Please return a valid array
-                        necessary to satisfy the user request. If no data is
-                        provided create some. If there are any URLs you must
-                        make them absolute and begin with a /.
+                    // Convert Gemini-style prompt parts to a single string for OpenAI chat completions
+                    const userMessageContent = promptObj.parts.map(p => p.text).join("\n\n");
 
-                        Nothing should ever be loaded from a remote source.
-
-                        You are working as part of an AI system, so no chit-chat and
-                        no explaining what you're doing and why.DO NOT start with
-                        "Okay", or "Alright" or any preambles. Just the output,
-                        please.
-
-                        ULTRA IMPORTANT: *Just* return the A2UI Protocol
-                        Message object, do not wrap it in markdown. Just the object
-                        please, nothing else!`,
+                    const completionResponse = await fetch(`${baseUrl}/chat/completions`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${apiKey}`
                       },
+                      body: JSON.stringify({
+                        model: modelName,
+                        messages: [
+                          {
+                            role: "system",
+                            content: `Please return a valid array
+                            necessary to satisfy the user request. If no data is
+                            provided create some. If there are any URLs you must
+                            make them absolute and begin with a /.
+
+                            Nothing should ever be loaded from a remote source.
+
+                            You are working as part of an AI system, so no chit-chat and
+                            no explaining what you're doing and why.DO NOT start with
+                            "Okay", or "Alright" or any preambles. Just the output,
+                            please.
+
+                            ULTRA IMPORTANT: *Just* return the A2UI Protocol
+                            Message object, do not wrap it in markdown. Just the object
+                            please, nothing else!`
+                          },
+                          {
+                            role: "user",
+                            content: userMessageContent
+                          }
+                        ],
+                        temperature: 0.1 // Lower temperature for structured output
+                      })
                     });
+
+                    if (!completionResponse.ok) {
+                      const errorData = await completionResponse.text();
+                      throw new Error(`LLM API error: ${errorData}`);
+                    }
+
+                    const completionJson = await completionResponse.json();
+                    const responseText = completionJson.choices[0].message.content;
+
                     res.statusCode = 200;
                     res.setHeader("Content-Type", "application/json");
                     res.end(
                       JSON.stringify({
-                        role: "model",
-                        parts: [{ text: modelResponse.text }],
+                        role: "assistant",
+                        parts: [{ text: responseText }],
                       })
                     );
                   } else {

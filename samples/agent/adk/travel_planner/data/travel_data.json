@@ -1,0 +1,227 @@
+[
+  {
+    "city": "Tokyo",
+    "landmarks": [
+      {
+        "id": "ChIJ35ov0dCOGGARKvdDH7NPHX0",
+        "name": "Tokyo Skytree",
+        "address": "1-chōme-1-2 Oshiage, Sumida City, Tokyo 131-0045, Japan",
+        "rating": 4.4,
+        "description": "World's tallest freestanding broadcasting tower with an observation deck boasting 360-degree views.",
+        "image_url": "static/tokyo_0.jpg"
+      },
+      {
+        "id": "ChIJCewJkL2LGGAR3Qmk0vCTGkg",
+        "name": "Tokyo Tower",
+        "address": "4-chōme-2-8 Shibakōen, Minato City, Tokyo 105-0011, Japan",
+        "rating": 4.5,
+        "description": "Reminiscent of the Eiffel Tower, this landmark features observation areas & other attractions.",
+        "image_url": "static/tokyo_1.jpg"
+      },
+      {
+        "id": "ChIJ8T1GpMGOGGARDYGSgpooDWw",
+        "name": "Sensō-ji",
+        "address": "2-chōme-3-1 Asakusa, Taito City, Tokyo 111-0032, Japan",
+        "rating": 4.5,
+        "description": "Completed in 645, this temple, Tokyo's oldest, was built to honor Kannon, the goddess of mercy.",
+        "image_url": "static/tokyo_2.jpg"
+      },
+      {
+        "id": "ChIJP9eKBdeMGGAR0zzBXJNVj5A",
+        "name": "Omoide Yokocho Memory Lane",
+        "address": "1 Chome-2 Nishishinjuku, Shinjuku City, Tokyo 160-0023, Japan",
+        "rating": 4.2,
+        "description": "Landmark alleyway featuring a selection of food stalls for simple fare & alcoholic drinks.",
+        "image_url": "static/tokyo_3.jpg"
+      },
+      {
+        "id": "ChIJX53MMgCNGGART78Pfc57ZuQ",
+        "name": "Tokyo Night & Light",
+        "address": "2-chōme-8-1 Nishishinjuku, Shinjuku City, Tokyo 163-8001, Japan",
+        "rating": 4.6,
+        "description": "No description available.",
+        "image_url": "static/tokyo_4.jpg"
+      }
+    ]
+  },
+  {
+    "city": "Paris",
+    "landmarks": [
+      {
+        "id": "ChIJATr1n-Fx5kcRjQb6q6cdQDY",
+        "name": "Notre-Dame Cathedral of Paris",
+        "address": "6 Parvis Notre-Dame - Pl. Jean-Paul II, 75004 Paris, France",
+        "rating": 4.7,
+        "description": "Towering, 12th-century cathedral with flying buttresses & gargoyles, setting for Hugo's novel.",
+        "image_url": "static/paris_0.jpg"
+      },
+      {
+        "id": "ChIJjx37cOxv5kcRPWQuEW5ntdk",
+        "name": "Arc de Triomphe",
+        "address": "Pl. Charles de Gaulle, 75008 Paris, France",
+        "rating": 4.7,
+        "description": "Iconic triumphal arch built to commemorate Napoleon's victories, with an observation deck.",
+        "image_url": "static/paris_1.jpg"
+      },
+      {
+        "id": "ChIJAQAAMCxu5kcRx--_4QnbGcI",
+        "name": "Tuileries Garden",
+        "address": "75001 Paris, France",
+        "rating": 4.6,
+        "description": "Expansive, 17th-century formal garden dotted with statues, including 18 bronzes by Maillol.",
+        "image_url": "static/paris_2.jpg"
+      },
+      {
+        "id": "ChIJLU7jZClu5kcR4PcOOO6p3I0",
+        "name": "Eiffel Tower",
+        "address": "Av. Gustave Eiffel, 75007 Paris, France",
+        "rating": 4.7,
+        "description": "Gustave Eiffel's iconic, wrought-iron 1889 tower, with steps and elevators to observation decks.",
+        "image_url": "static/paris_3.jpg"
+      },
+      {
+        "id": "ChIJR3122B9u5kcRajG2bEZLypA",
+        "name": "Conciergerie",
+        "address": "2 Bd du Palais, 75001 Paris, France",
+        "rating": 4.4,
+        "description": "Gothic, riverside fortress & French Revolution prison, housing Marie Antoinette's former cell.",
+        "image_url": "static/paris_4.jpg"
+      }
+    ]
+  },
+  {
+    "city": "New York",
+    "landmarks": [
+      {
+        "id": "ChIJe7vKMf9YwokRIMYfDz7iF9o",
+        "name": "Top of The Rock",
+        "address": "30 Rockefeller Plaza, New York, NY 10112, USA",
+        "rating": 4.7,
+        "description": "Observatory on top of Rockefeller Center, with an ocean-liner style design, offering city views.",
+        "image_url": "static/new_york_0.jpg"
+      },
+      {
+        "id": "ChIJaXQRs6lZwokRY6EFpJnhNNE",
+        "name": "Empire State Building",
+        "address": "20 W 34th St., New York, NY 10001, USA",
+        "rating": 4.7,
+        "description": "Iconic, art deco office tower from 1931 with exhibits & observatories on the 86th & 102nd floors.",
+        "image_url": "static/new_york_1.jpg"
+      },
+      {
+        "id": "ChIJPTacEpBQwokRKwIlDXelxkA",
+        "name": "Statue of Liberty",
+        "address": "New York, NY 10004, USA",
+        "rating": 4.7,
+        "description": "Iconic National Monument opened in 1886, offering guided tours & a museum, plus harbor & city views.",
+        "image_url": "static/new_york_2.jpg"
+      },
+      {
+        "id": "ChIJ4zGFAZpYwokRGUGph3Mf37k",
+        "name": "Central Park",
+        "address": "New York, NY, USA",
+        "rating": 4.8,
+        "description": "Sprawling park with pedestrian paths & ballfields, plus a zoo, carousel, boat rentals & a reservoir.",
+        "image_url": "static/new_york_3.jpg"
+      },
+      {
+        "id": "ChIJ5bQPhMdZwokRkTwKhVxhP1g",
+        "name": "The High Line",
+        "address": "New York, NY 10011, USA",
+        "rating": 4.7,
+        "description": "Popular park 30 feet above street level on an old rail line, with river & city views.",
+        "image_url": "static/new_york_4.jpg"
+      }
+    ]
+  },
+  {
+    "city": "London",
+    "landmarks": [
+      {
+        "id": "ChIJc2nSALkEdkgRkuoJJBfzkUI",
+        "name": "London Eye",
+        "address": "Riverside Building, County Hall, Westminster Bridge Rd, London SE1 7PB, UK",
+        "rating": 4.5,
+        "description": "No description available.",
+        "image_url": "static/london_0.jpg"
+      },
+      {
+        "id": "ChIJk9LIC8cEdkgR2TkO-raMEDk",
+        "name": "The London Dungeon",
+        "address": "Riverside Building, County Hall, Westminster Bridge Rd, London SE1 7PB, UK",
+        "rating": 4.3,
+        "description": "Costumed actors & themed fairground rides depicting macabre stories from London's past.",
+        "image_url": "static/london_1.jpg"
+      },
+      {
+        "id": "ChIJ3TgfM0kDdkgRZ2TV4d1Jv6g",
+        "name": "Tower of London",
+        "address": "London EC3N 4AB, UK",
+        "rating": 4.7,
+        "description": "Centuries of bloody history around a medieval castle, home to Crown Jewels and iconic Beefeaters.",
+        "image_url": "static/london_2.jpg"
+      },
+      {
+        "id": "ChIJB9OTMDIbdkgRp0JWbQGZsS8",
+        "name": "The British Museum",
+        "address": "Great Russell St, London WC1B 3DG, UK",
+        "rating": 4.7,
+        "description": "Huge showcase for global antiquities, including Egyptian mummies and ancient Greek sculptures.",
+        "image_url": "static/london_3.jpg"
+      },
+      {
+        "id": "ChIJSdtli0MDdkgRLW9aCBpCeJ4",
+        "name": "Tower Bridge",
+        "address": "Tower Bridge Rd, London SE1 2UP, UK",
+        "rating": 4.8,
+        "description": "Panoramic views from high-level walkways and behind-the-scenes access to original lifting machinery.",
+        "image_url": "static/london_4.jpg"
+      }
+    ]
+  },
+  {
+    "city": "Shanghai",
+    "landmarks": [
+      {
+        "id": "ChIJcT52JmpwsjURKKp8uyIQKjU",
+        "name": "Shanghai Tower",
+        "address": "501 Yin Cheng Zhong Lu, Lujiazui, Pu Dong Xin Qu, Shang Hai Shi, China, 200120",
+        "rating": 4.6,
+        "description": "632-m. megatall skyscraper with 2 observation decks, plus restaurants, bars, shops & a hotel.",
+        "image_url": "static/shanghai_0.jpg"
+      },
+      {
+        "id": "ChIJ29SwJftwsjURZYXg4jufPhY",
+        "name": "Oriental Pearl TV Tower",
+        "address": "1 Shi Ji Da Dao, Lujiazui, Pu Dong Xin Qu, Shang Hai Shi, China, 200120",
+        "rating": 4.6,
+        "description": "Futuristic TV tower (468-meters tall) offering city vistas, a history museum & revolving restaurant.",
+        "image_url": "static/shanghai_1.jpg"
+      },
+      {
+        "id": "ChIJ2-UI76F6sjURj_HAeG5PMhE",
+        "name": "Tianzifang",
+        "address": "210弄 Tai Kang Lu, Huang Pu Qu, China, 200023",
+        "rating": 4.2,
+        "description": "This former French Concession area with narrow alleys is known for its quaint shops, cafes & bars.",
+        "image_url": "static/shanghai_2.jpg"
+      },
+      {
+        "id": "ChIJidPZMUGHrTUR29eIuHbpoIQ",
+        "name": "Yu Garden",
+        "address": "四牌楼 Huangpu, Shanghai, China, 200000",
+        "rating": 4.5,
+        "description": "5-acre garden built in 1577 that features Ming dynasty pavilions, ponds, rockeries & arched bridges.",
+        "image_url": "static/shanghai_3.jpg"
+      },
+      {
+        "id": "ChIJYUiHi1dwsjURZK_REO37Vk0",
+        "name": "The Bund",
+        "address": "Zhong Shan Dong Yi Lu, Waitan, Huang Pu Qu, Shang Hai Shi, China, 200002",
+        "rating": 4.7,
+        "description": "Historic, 1,500-meter-long waterside promenade showcasing distinctive modern & colonial buildings.",
+        "image_url": "static/shanghai_4.jpg"
+      }
+    ]
+  }
+]
